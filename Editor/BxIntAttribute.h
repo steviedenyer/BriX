@@ -11,6 +11,8 @@ public:
     explicit BxIntAttribute( int in = 0, QObject *parent = 0);
     int getValue() { return mValue;}
 
+    virtual QWidget* getControl();
+
 public slots:
     void setValue(int in) { mValue = in;}
 

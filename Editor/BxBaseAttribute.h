@@ -9,7 +9,8 @@ class BxBaseAttribute
 public:
     BxBaseAttribute();
     ~BxBaseAttribute();
-    QWidget* getControl() { return mControl; }
+
+    virtual QWidget* getControl() = 0;
 //    int getValue() { return mValue;}
 protected:
     QWidget* mControl;
