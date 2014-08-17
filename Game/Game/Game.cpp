@@ -26,24 +26,24 @@ public:
 
     m.drawCube();
 
-    auto drawSphere = [&m](float x, float y)
+    auto drawSphere = [&m](float x, float y, float rad)
       {
       Eks::Transform tx = Eks::Transform::Identity();
       tx.translate(Eks::Vector3D(x, y, 0));
 
       m.setTransform(tx);
-      m.drawSphere(1.1);
+      m.drawSphere(rad);
       };
 
-    drawSphere(1, 1);
 
-
-    QFile loadFile("file.json");
+    QFile loadFile("/Volumes/User/BriX/Game/deets.json");
 
     if (!loadFile.open(QIODevice::ReadOnly)) {
         qWarning("Couldn't open save file.");
         return;
     }
+
+    float scale = 0.01f;
 
     QByteArray saveData = loadFile.readAll();
     QJsonDocument doc(QJsonDocument::fromJson(saveData));
@@ -52,6 +52,18 @@ public:
     for (int i = 0; i < arr.size(); ++i)
       {
       QJsonObject obj(arr[i].toObject());
+
+      auto first = obj.begin();
+      QJsonObject data = first.value().toObject();
+
+      auto pos = data["pos"].toObject();
+      auto x = pos["x"].toDouble();
+      auto y = pos["y"].toDouble();
+
+      auto attr = data["attr"].toObject();
+      auto rad = attr["radius"].toDouble();
+
+      drawSphere(x * scale, y * scale, rad * scale);
       }
 
     ShaderVertexLayoutDescription::Semantic semantics[] = {
