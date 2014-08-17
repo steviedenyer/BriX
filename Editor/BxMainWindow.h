@@ -37,6 +37,7 @@ public slots:
     void itemInserted(QGraphicsItem*);
     void newFile();
     void saveFile();
+    void loadFile();
 
 private:
     void createToolBox();
@@ -53,9 +54,9 @@ private:
     QMenu* aboutMenu;
 
     QAction* aboutAction;
-
     QAction* newAction;
     QAction* saveAsAction;
+    QAction* loadAction;
 
     QButtonGroup* actorButtonGroup;
 
