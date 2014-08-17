@@ -1,8 +1,6 @@
 #include "BxLevelScene.h"
 #include <QGraphicsSceneMouseEvent>
 
-#include "BxActorItem.h"
-
 BxLevelScene::BxLevelScene()
 {
     mMode = moveItem;
@@ -25,9 +23,7 @@ void BxLevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event)
 
 
             newItem->setPos(event->scenePos());
-            addItem(newItem);
-
-            emit(itemInserted(newItem));
+            insertActor(newItem);
             setMode(moveItem);
         }
             break;
@@ -40,4 +36,10 @@ void BxLevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event)
 void BxLevelScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseMoveEvent(event);
+}
+
+void BxLevelScene::insertActor(BxActorItem* in)
+{
+    addItem(in);
+    emit(itemInserted(in));
 }

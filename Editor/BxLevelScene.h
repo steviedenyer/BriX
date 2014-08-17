@@ -2,6 +2,7 @@
 #define BXLEVELSCENE_H
 
 #include <QGraphicsScene>
+#include "BxActorItem.h"
 
 class BxLevelScene : public QGraphicsScene
 {
@@ -10,6 +11,7 @@ public:
 
     enum Mode { insertItem, moveItem, moveView };
     BxLevelScene();
+    void insertActor(BxActorItem*);
     
 signals:
 

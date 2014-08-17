@@ -87,6 +87,10 @@ void BxMainWindow::createActions() // actions connect UI to functions
     saveAsAction = new QAction(tr("Save As"),this);
     saveAsAction->setShortcut(tr("Ctrl+Shift+S"));
     connect(saveAsAction, SIGNAL(triggered()), this, SLOT(saveFile()));
+
+    loadAction = new QAction(tr("Open File"),this);
+    loadAction->setShortcut(tr("Ctrl+O"));
+    connect(loadAction, SIGNAL(triggered()), this, SLOT(loadFile()));
 }
 
 void BxMainWindow::createMenus()
@@ -94,6 +98,7 @@ void BxMainWindow::createMenus()
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(newAction);
     fileMenu->addAction(saveAsAction);
+    fileMenu->addAction(loadAction);
 
     aboutMenu = menuBar()->addMenu(tr("&Help"));
     aboutMenu->addAction(aboutAction);
@@ -177,6 +182,8 @@ void BxMainWindow::newFile()
     scene->clear();
 }
 
+
+
 void BxMainWindow::saveFile()
 {
     QString path = QFileDialog::getSaveFileName(this, "Filename", QString(), "*.json");
@@ -193,7 +200,6 @@ void BxMainWindow::saveFile()
     }
 
     QJsonObject saveObject;
-
     QJsonArray arr;
 
     foreach(auto item, scene->items())
@@ -211,6 +217,50 @@ void BxMainWindow::saveFile()
 
     QJsonDocument saveDoc(saveObject);
     saveFile.write(saveDoc.toJson());
+}
+
+void BxMainWindow::loadFile()
+{
+    QString path = QFileDialog::getOpenFileName(this, "Filename", QString(), "*.json");
+    if(path.isEmpty())
+    {
+        return;
+    }
+
+    QFile loadFile(path);
+    if (!loadFile.open(QIODevice::ReadOnly))
+    {
+        qWarning("Couldn't open save file.");
+        return;
+    }
+
+    scene->clear();
+
+    QByteArray saveData = loadFile.readAll();
+    QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
+
+    QJsonArray actorArray = loadDoc.object()["actors"].toArray(); // find "actors" in the doc and loop over them
+    foreach(auto actor, actorArray)
+    {
+        QJsonObject actorObject = actor.toObject();
+            QJsonObject pos = actorObject["pos"].toObject();
+                double x = pos["x"].toDouble();
+                double y = pos["y"].toDouble();
+
+
+
+        BxActorItem* newActor = new BxActorItem();
+        BxIntAttribute* test = new BxIntAttribute("test", 5);
+        newActor->setX(x);
+        newActor->setY(y);
+        newActor->addAttribute(test);
+
+        scene->insertActor(newActor);
+    }
+
+
+    return;
+
 }
 
 void BxMainWindow::actorButtonGroupClick(QAbstractButton* button)
