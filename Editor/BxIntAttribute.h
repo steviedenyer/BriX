@@ -8,10 +8,11 @@ class BxIntAttribute : public QObject, public BxBaseAttribute
 {
     Q_OBJECT
 public:
-    explicit BxIntAttribute( int in = 0, QObject *parent = 0);
+    explicit BxIntAttribute( QString name, int in = 0, QObject *parent = 0);
     int getValue() { return mValue;}
 
-    virtual QWidget* getControl();
+    virtual QLayout* getControl(QWidget* parent);
+    virtual void writeToJson(QJsonObject &);
 
 public slots:
     void setValue(int in) { mValue = in;}

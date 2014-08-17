@@ -1,17 +1,29 @@
 #include "BxIntAttribute.h"
 
-BxIntAttribute::BxIntAttribute(int in, QObject *parent) :
-    QObject(parent)
+BxIntAttribute::BxIntAttribute(QString name, int in, QObject *parent) :
+    QObject(parent), BxBaseAttribute(name)
 {
-    mValue = 0;
+    mValue = in;
 }
 
-QWidget *BxIntAttribute::getControl()
-  {
-  QSpinBox* spinBox = new QSpinBox();
+QLayout* BxIntAttribute::getControl(QWidget* parent)
+{
+  QHBoxLayout* grp = new QHBoxLayout();
+
+  QSpinBox* spinBox = new QSpinBox(parent);
   spinBox->setMaximum(100);
   spinBox->setMinimum(0);
   spinBox->setValue(mValue);
   QObject::connect(spinBox, SIGNAL(valueChanged(int)), this, SLOT(setValue(int)));
-  return spinBox;
-  }
+
+  QLabel* label = new QLabel(mName, parent);
+
+  grp->addWidget(label);
+  grp->addWidget(spinBox);
+  return grp;
+}
+
+ void BxIntAttribute::writeToJson(QJsonObject &in)
+ {
+     in[mName] = mValue;
+ }

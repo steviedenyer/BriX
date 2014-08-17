@@ -19,6 +19,11 @@ void BxLevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event)
         case insertItem:
         {
             BxActorItem* newItem = new BxActorItem((QRect(-50, -50, 100, 100)));
+
+            BxIntAttribute* radiusAttr = new BxIntAttribute("radius", 5);
+            newItem->addAttribute(radiusAttr);
+
+
             newItem->setPos(event->scenePos());
             addItem(newItem);
 

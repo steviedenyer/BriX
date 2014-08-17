@@ -5,6 +5,7 @@
 
 #include <QGraphicsItem>
 #include <QtWidgets>
+#include <QVector>
 
 class BxActorItem : public QGraphicsEllipseItem
 {
@@ -13,13 +14,18 @@ public:
     BxActorItem(const QRectF &rect, QGraphicsItem *parent = 0);
 
     QWidget* getControls();
+    void writeToJson(QJsonObject &);
+    void addAttribute(BxBaseAttribute*);
+
 signals:
     
 public slots:
 //    void setValue(int in) { testValue = in; }
 
 private:
-    BxIntAttribute* mTestValue;
+//    BxIntAttribute* mTestValue;
+    QVector<BxBaseAttribute*> mAttributes;
+    QString mID;
     
 };
 

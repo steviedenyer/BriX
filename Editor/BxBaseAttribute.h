@@ -3,17 +3,23 @@
 
 #include <QWidget>
 #include <QtWidgets>
+#include <QJsonObject>
 
 class BxBaseAttribute
 {
-public:
-    BxBaseAttribute();
+public:    
+    BxBaseAttribute(const QString &);
     ~BxBaseAttribute();
 
-    virtual QWidget* getControl() = 0;
+    virtual QLayout* getControl(QWidget* parent) = 0;
+    void setName(const QString &);
+    const QString & getName();
+
+    virtual void writeToJson(QJsonObject &) = 0;
 //    int getValue() { return mValue;}
 protected:
     QWidget* mControl;
+    QString mName;
 
 private:
 

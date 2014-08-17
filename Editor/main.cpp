@@ -1,4 +1,6 @@
 #include "BxMainWindow.h"
+#include "QJsonDocument"
+#include "QJsonObject"
 
 #include <QApplication>
 
@@ -10,6 +12,4 @@ int main(int argc, char** argv)
     w.show();
 
     return a.exec();
-
-
 }
