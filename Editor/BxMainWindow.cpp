@@ -79,10 +79,22 @@ void BxMainWindow::createActions() // actions connect UI to functions
     aboutAction = new QAction(tr("Info"),this);
     aboutAction->setShortcut(tr("Ctrl+T"));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutMessage()));
+
+    newAction = new QAction(tr("New"),this);
+    newAction->setShortcut(tr("Ctrl+N"));
+    connect(newAction, SIGNAL(triggered()), this, SLOT(newFile()));
+
+    saveAsAction = new QAction(tr("Save As"),this);
+    saveAsAction->setShortcut(tr("Ctrl+Shift+S"));
+    connect(saveAsAction, SIGNAL(triggered()), this, SLOT(saveFile()));
 }
 
 void BxMainWindow::createMenus()
 {
+    fileMenu = menuBar()->addMenu(tr("&File"));
+    fileMenu->addAction(newAction);
+    fileMenu->addAction(saveAsAction);
+
     aboutMenu = menuBar()->addMenu(tr("&Help"));
     aboutMenu->addAction(aboutAction);
 }
@@ -90,6 +102,10 @@ void BxMainWindow::createMenus()
 
 void BxMainWindow::createToolBars()
 {
+    fileToolBar = addToolBar(tr("File"));
+    fileToolBar->addAction(newAction);
+    fileToolBar->addAction(saveAsAction);
+
     aboutToolBar = addToolBar(tr("Edit"));
     aboutToolBar->addAction(aboutAction);
 
@@ -144,6 +160,57 @@ void BxMainWindow::itemInserted(QGraphicsItem *in)
     {
             button->setChecked(false);
     }
+}
+
+void BxMainWindow::newFile()
+{
+    if (QMessageBox::question(
+            this,
+            "Are you sure?",
+            "Are you sure you want a new file?",
+            QMessageBox::Yes,
+            QMessageBox::No) == QMessageBox::No)
+    {
+        return;
+    }
+
+    scene->clear();
+}
+
+void BxMainWindow::saveFile()
+{
+    QString path = QFileDialog::getSaveFileName(this, "Filename", QString(), "*.json");
+    if (path.isEmpty())
+    {
+        return;
+    }
+
+    QFile saveFile(path);
+
+    if (!saveFile.open(QIODevice::WriteOnly)) {
+        qWarning("Couldn't open save file.");
+        return;
+    }
+
+    QJsonObject saveObject;
+
+    QJsonArray arr;
+
+    foreach(auto item, scene->items())
+    {
+        auto actor = dynamic_cast<BxActorItem*>(item);
+        if (actor)
+        {
+            QJsonObject json;
+            actor->writeToJson(json);
+            arr.append(json);
+        }
+    }
+
+    saveObject["actors"] = arr;
+
+    QJsonDocument saveDoc(saveObject);
+    saveFile.write(saveDoc.toJson());
 }
 
 void BxMainWindow::actorButtonGroupClick(QAbstractButton* button)

@@ -35,6 +35,8 @@ public slots:
     void aboutMessage();
     void selectionChanged();
     void itemInserted(QGraphicsItem*);
+    void newFile();
+    void saveFile();
 
 private:
     void createToolBox();
@@ -43,13 +45,17 @@ private:
     void createToolBars();
     void populateAttributeEditor();
 
-
+    QToolBar* fileToolBar;
     QToolBar* aboutToolBar;
     QToolButton* toolButtonAbout;
 
+    QMenu* fileMenu;
     QMenu* aboutMenu;
 
     QAction* aboutAction;
+
+    QAction* newAction;
+    QAction* saveAsAction;
 
     QButtonGroup* actorButtonGroup;
 
