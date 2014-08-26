@@ -7,7 +7,9 @@ SOURCES += \
     BxLevelView.cpp \
     BxMainWindow.cpp \
     BxBaseAttribute.cpp \
-    BxIntAttribute.cpp
+    BxIntAttribute.cpp \
+    BxPath.cpp \
+    BxPathPoint.cpp
 
 HEADERS += \
     BxActorItem.h \
@@ -16,4 +18,6 @@ HEADERS += \
     BxLevelView.h \
     BxBaseAttribute.h \
     BxIntAttribute.h \
-    BxAttributes.h
+    BxAttributes.h \
+    BxPath.h \
+    BxPathPoint.h

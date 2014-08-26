@@ -10,11 +10,13 @@
 class BxActorItem : public QGraphicsEllipseItem
 {
 public:
-    BxActorItem();
-    BxActorItem(const QRectF &rect, QGraphicsItem *parent = 0);
+    BxActorItem(QGraphicsItem *parent = 0);
+    BxActorItem(const QJsonObject &, QGraphicsItem *parent = 0);
 
+    void initialise();
     QWidget* getControls();
     void writeToJson(QJsonObject &);
+    void readFromJson(const QJsonObject &);
     void addAttribute(BxBaseAttribute*);
 
 signals:

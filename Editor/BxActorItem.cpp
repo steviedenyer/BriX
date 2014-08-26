@@ -2,14 +2,20 @@
 #include <QTreeView>
 #include <QObject>
 
-BxActorItem::BxActorItem()
+BxActorItem::BxActorItem(QGraphicsItem* parent) :
+    QGraphicsEllipseItem(QRect(-50, -50, 100, 100), parent)
 {
-    //mTestValue = new BxIntAttribute();
-    mID = "test";
+    initialise();
 }
 
-BxActorItem::BxActorItem(const QRectF &rect, QGraphicsItem* parent) :
-    QGraphicsEllipseItem(rect, parent)
+BxActorItem::BxActorItem(const QJsonObject & actorObj, QGraphicsItem *parent) :
+    QGraphicsEllipseItem(QRect(-50, -50, 100, 100), parent)
+{
+    initialise();
+    this->readFromJson(actorObj);
+}
+
+void BxActorItem::initialise()
 {
     mID = "test";
     //mTestValue = new BxIntAttribute();
@@ -47,6 +53,23 @@ void BxActorItem::writeToJson(QJsonObject &in)
     }
     JsonActor["attr"] = JsonAttr;
     in[mID] = JsonActor;
+}
+
+void BxActorItem::readFromJson(const QJsonObject &in)
+{
+        QJsonObject pos = in["pos"].toObject();
+            double x = pos["x"].toDouble();
+            double y = pos["y"].toDouble();
+
+        QJsonObject attr = in["attr"].toObject();
+            double radius = attr["radius"].toDouble();
+
+        BxIntAttribute* radiusAttr = new BxIntAttribute("radius", radius);
+
+        setX(x);
+        setY(y);
+        addAttribute(radiusAttr);
+
 }
 
 void BxActorItem::addAttribute(BxBaseAttribute *in)

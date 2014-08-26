@@ -18,6 +18,8 @@ signals:
     void itemInserted(QGraphicsItem*);
 
 protected:
+    void keyPressEvent(QKeyEvent*);
+
     void mousePressEvent(QGraphicsSceneMouseEvent*);
     void mouseMoveEvent(QGraphicsSceneMouseEvent*);
 

@@ -32,10 +32,12 @@ signals:
     
 public slots:
     void actorButtonGroupClick(QAbstractButton* );
+    void cameraButtonGroupClick(QAbstractButton* );
     void aboutMessage();
     void selectionChanged();
     void itemInserted(QGraphicsItem*);
     void newFile();
+    void saveAs();
     void saveFile();
     void loadFile();
 
@@ -45,6 +47,8 @@ private:
     void createMenus();
     void createToolBars();
     void populateAttributeEditor();
+
+    QString savePath;
 
     QToolBar* fileToolBar;
     QToolBar* aboutToolBar;
@@ -59,6 +63,7 @@ private:
     QAction* loadAction;
 
     QButtonGroup* actorButtonGroup;
+    QButtonGroup* cameraButtonGroup;
 
     QToolBox* mainToolBox;
     QWidget* attributeEditor;

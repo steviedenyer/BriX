@@ -54,14 +54,27 @@ void BxMainWindow::createToolBox()
     connect(actorButtonGroup, SIGNAL(buttonClicked(QAbstractButton*)),
             this, SLOT(actorButtonGroupClick(QAbstractButton *)));
 
+    cameraButtonGroup = new QButtonGroup(this);
+    cameraButtonGroup->setExclusive(false);
+    connect(cameraButtonGroup, SIGNAL(buttonClicked(QAbstractButton*)),
+            this, SLOT(cameraButtonGroupClick(QAbstractButton *)));
 
-    // build layout of widgets
+    // build layouts of widgets
     QGridLayout* actorLayout = new QGridLayout;
     actorLayout->setAlignment(Qt::AlignTop);
-    QPushButton* button1 = new QPushButton("Add Actor");
-    button1->setCheckable(true);
-    actorButtonGroup->addButton(button1);
-    actorLayout->addWidget(button1);
+    QPushButton* addActorButton = new QPushButton("Add Actor");
+    addActorButton->setCheckable(true);
+    actorButtonGroup->addButton(addActorButton);
+    actorLayout->addWidget(addActorButton);
+
+    QGridLayout* cameraLayout = new QGridLayout;
+    cameraLayout->setAlignment(Qt::AlignTop);
+    QPushButton* AddCameraPathButton = new QPushButton("Add Camera Path");
+    AddCameraPathButton->setCheckable(true);
+    cameraButtonGroup->addButton(AddCameraPathButton);
+    cameraLayout->addWidget(AddCameraPathButton);
+
+
 
     // add layout to king widget
     QWidget* actorWidget = new QWidget;
@@ -86,7 +99,7 @@ void BxMainWindow::createActions() // actions connect UI to functions
 
     saveAsAction = new QAction(tr("Save As"),this);
     saveAsAction->setShortcut(tr("Ctrl+Shift+S"));
-    connect(saveAsAction, SIGNAL(triggered()), this, SLOT(saveFile()));
+    connect(saveAsAction, SIGNAL(triggered()), this, SLOT(saveAs()));
 
     loadAction = new QAction(tr("Open File"),this);
     loadAction->setShortcut(tr("Ctrl+O"));
@@ -182,9 +195,16 @@ void BxMainWindow::newFile()
     scene->clear();
 }
 
-
-
 void BxMainWindow::saveFile()
+{
+    if(savePath == "")
+    {
+        saveAs();
+    }
+
+}
+
+void BxMainWindow::saveAs()
 {
     QString path = QFileDialog::getSaveFileName(this, "Filename", QString(), "*.json");
     if (path.isEmpty())
@@ -192,7 +212,8 @@ void BxMainWindow::saveFile()
         return;
     }
 
-    QFile saveFile(path);
+    savePath = path;
+    QFile saveFile(savePath);
 
     if (!saveFile.open(QIODevice::WriteOnly)) {
         qWarning("Couldn't open save file.");
@@ -240,24 +261,24 @@ void BxMainWindow::loadFile()
     QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
 
     QJsonArray actorArray = loadDoc.object()["actors"].toArray(); // find "actors" in the doc and loop over them
-    foreach(auto actor, actorArray)
+    for (int i = 0; i < actorArray.size(); ++i)
     {
-        QJsonObject actorObject = actor.toObject();
-            QJsonObject pos = actorObject["pos"].toObject();
-                double x = pos["x"].toDouble();
-                double y = pos["y"].toDouble();
+        QJsonObject obj(actorArray[i].toObject());
 
+        auto first = obj.begin(); // work this out
+        QJsonObject data = first.value().toObject();
 
-
-        BxActorItem* newActor = new BxActorItem();
-        BxIntAttribute* test = new BxIntAttribute("test", 5);
-        newActor->setX(x);
-        newActor->setY(y);
-        newActor->addAttribute(test);
-
+        BxActorItem* newActor = new BxActorItem(data);
         scene->insertActor(newActor);
     }
 
+/*
+    foreach(auto actor, actorArray)
+    {
+        BxActorItem* newActor = new BxActorItem(actor.toObject());
+        scene->insertActor(newActor);
+    }
+*/
 
     return;
 
