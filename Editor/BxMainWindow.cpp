@@ -241,7 +241,8 @@ void BxMainWindow::saveAs()
     }
 
     QJsonObject saveObject;
-    QJsonArray arr;
+    QJsonArray actorArray;
+    QJsonObject camJsonObject;
 
     foreach(auto item, scene->items())
     {
@@ -250,11 +251,18 @@ void BxMainWindow::saveAs()
         {
             QJsonObject json;
             actor->writeToJson(json);
-            arr.append(json);
+            actorArray.append(json);
         }
     }
 
-    saveObject["actors"] = arr;
+    BxNodePath* camPath = scene->getCameraPath();
+    if(camPath)
+    {
+        camPath->writeToJson(camJsonObject);
+    }
+
+    saveObject["actors"] = actorArray;
+    saveObject["camPath"] = camJsonObject;
 
     QJsonDocument saveDoc(saveObject);
     saveFile.write(saveDoc.toJson());

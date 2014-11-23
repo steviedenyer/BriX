@@ -8,6 +8,8 @@ class BxNodePath
 {
 public:
     BxNodePath(QGraphicsScene* );
+    void writeToJson(QJsonObject &);
+    void readFromJson(const QJsonObject &);
     void addPoint(const QPointF &);
 
 private:

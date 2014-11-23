@@ -14,6 +14,7 @@ public:
     BxLevelScene();
     void insertActor(BxNodeActor*);
     int getMode(){ return mMode; }
+    BxNodePath* getCameraPath(){ return mCameraPath; }
     
 signals:
 

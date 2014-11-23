@@ -23,3 +23,6 @@ HEADERS += \
     BxNodePath.h \
     BxNodePathPoint.h \
     BxNodeLine.h
+
+OTHER_FILES += \
+    ../../Desktop/test.json

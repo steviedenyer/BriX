@@ -8,6 +8,12 @@ BxNodePathPoint::BxNodePathPoint(QGraphicsItem* parent, QGraphicsScene* scene) :
     initialise();
 }
 
+void BxNodePathPoint::writeToJson(QJsonObject& JsonPos)
+{
+    JsonPos["x"]=x();
+    JsonPos["y"]=y();
+}
+
 void BxNodePathPoint::initialise()
 {
     setFlag(ItemIsMovable, true);
