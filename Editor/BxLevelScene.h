@@ -2,20 +2,22 @@
 #define BXLEVELSCENE_H
 
 #include <QGraphicsScene>
-#include "BxActorItem.h"
+#include "BxNodeActor.h"
+#include "BxNodePath.h"
 
 class BxLevelScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
 
-    enum Mode { insertItem, moveItem, moveView };
+    enum Mode { insertItem, moveItem, moveView, editCamera };
     BxLevelScene();
-    void insertActor(BxActorItem*);
+    void insertActor(BxNodeActor*);
     
 signals:
 
-    void itemInserted(QGraphicsItem*);
+    void itemInserted();
+    void cameraComplete();
 
 protected:
     void keyPressEvent(QKeyEvent*);
@@ -28,7 +30,7 @@ public slots:
     void setMode(int in){ mMode = in; }
 
 private:
-
+    BxNodePath* mCameraPath;
     int mMode;
 
     

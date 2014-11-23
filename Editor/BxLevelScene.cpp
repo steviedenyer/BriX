@@ -4,6 +4,7 @@
 BxLevelScene::BxLevelScene()
 {
     mMode = moveItem;
+    mCameraPath = new BxNodePath(this);
 }
 
 
@@ -16,17 +17,29 @@ void BxLevelScene::mousePressEvent(QGraphicsSceneMouseEvent* event)
     {
         case insertItem:
         {
-            BxActorItem* newItem = new BxActorItem();
-
+            // CONSTRUCT ARBITRARY ACTOR:
+            BxNodeActor* newItem = new BxNodeActor();
             BxIntAttribute* radiusAttr = new BxIntAttribute("radius", 5);
             newItem->addAttribute(radiusAttr);
-
-
             newItem->setPos(event->scenePos());
+
+
             insertActor(newItem);
             setMode(moveItem);
-        }
             break;
+        }
+        case editCamera:
+        {
+            if(mCameraPath)
+            {
+                mCameraPath->addPoint(event->scenePos());
+            }
+            else
+            {
+                mCameraPath = new BxNodePath(this);
+            }
+            break;
+        }
         default:
             ;
     }
@@ -46,17 +59,27 @@ void BxLevelScene::keyPressEvent(QKeyEvent* event)
         QList<QGraphicsItem*>items = this->selectedItems();
         foreach(auto i, items)
         {
-            BxActorItem* actor = dynamic_cast<BxActorItem*>(i);
+            BxNodeActor* actor = dynamic_cast<BxNodeActor*>(i);
             if(actor)
             {
                 removeItem(actor);
+                delete actor;
             }
+        }
+    }
+    if(event->key() == Qt::Key_Backspace)
+    {
+        if(mMode == editCamera)
+        {
+            emit(cameraComplete());
+            setMode(moveItem);
         }
     }
 }
 
-void BxLevelScene::insertActor(BxActorItem* in)
+void BxLevelScene::insertActor(BxNodeActor* in)
 {
     addItem(in);
-    emit(itemInserted(in));
+    emit(itemInserted());
 }
+

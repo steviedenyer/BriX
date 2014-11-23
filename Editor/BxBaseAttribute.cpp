@@ -17,7 +17,11 @@ const QString& BxBaseAttribute::getName()
 
 BxBaseAttribute::~BxBaseAttribute()
 {
-    delete mControl;
+    if(mControl)
+    {
+        mControl->deleteLater();
+//        delete mControl;
+    }
 }
 
 

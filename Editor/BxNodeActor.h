@@ -7,11 +7,13 @@
 #include <QtWidgets>
 #include <QVector>
 
-class BxActorItem : public QGraphicsEllipseItem
+class BxNodeActor : public QGraphicsEllipseItem
 {
 public:
-    BxActorItem(QGraphicsItem *parent = 0);
-    BxActorItem(const QJsonObject &, QGraphicsItem *parent = 0);
+    BxNodeActor(QGraphicsItem *parent = 0);
+    BxNodeActor(const QJsonObject &, QGraphicsItem *parent = 0);
+    ~BxNodeActor();
+
 
     void initialise();
     QWidget* getControls();

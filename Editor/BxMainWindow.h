@@ -2,7 +2,7 @@
 #define BXMAINWINDOW_H
 
 #include <QMainWindow>
-#include "BxActorItem.h"
+#include "BxNodeActor.h"
 #include "BxLevelScene.h"
 #include "BxLevelView.h"
 
@@ -35,7 +35,7 @@ public slots:
     void cameraButtonGroupClick(QAbstractButton* );
     void aboutMessage();
     void selectionChanged();
-    void itemInserted(QGraphicsItem*);
+    void clearButtons();
     void newFile();
     void saveAs();
     void saveFile();

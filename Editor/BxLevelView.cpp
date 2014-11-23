@@ -49,10 +49,7 @@ void BxLevelView::keyPressEvent(QKeyEvent* event)
     {
         centerOn(0,0);
     }
-    if(event->key() == Qt::Key_X)
-    {
 
-    }
     QGraphicsView::keyPressEvent(event);
 }
 

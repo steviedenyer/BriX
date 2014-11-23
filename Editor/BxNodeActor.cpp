@@ -1,21 +1,21 @@
-#include "BxActorItem.h"
-#include <QTreeView>
+#include "BxNodeActor.h"
+//#include <QTreeView>
 #include <QObject>
 
-BxActorItem::BxActorItem(QGraphicsItem* parent) :
+BxNodeActor::BxNodeActor(QGraphicsItem* parent) :
     QGraphicsEllipseItem(QRect(-50, -50, 100, 100), parent)
 {
     initialise();
 }
 
-BxActorItem::BxActorItem(const QJsonObject & actorObj, QGraphicsItem *parent) :
+BxNodeActor::BxNodeActor(const QJsonObject & actorObj, QGraphicsItem *parent) :
     QGraphicsEllipseItem(QRect(-50, -50, 100, 100), parent)
 {
     initialise();
     this->readFromJson(actorObj);
 }
 
-void BxActorItem::initialise()
+void BxNodeActor::initialise()
 {
     mID = "test";
     //mTestValue = new BxIntAttribute();
@@ -23,7 +23,7 @@ void BxActorItem::initialise()
     setFlag(ItemIsSelectable, true);
 }
 
-QWidget* BxActorItem::getControls()
+QWidget* BxNodeActor::getControls()
 {
     QWidget* grp = new QWidget;
     QVBoxLayout* grpLayout = new QVBoxLayout(grp);
@@ -37,7 +37,7 @@ QWidget* BxActorItem::getControls()
     return grp;
 }
 
-void BxActorItem::writeToJson(QJsonObject &in)
+void BxNodeActor::writeToJson(QJsonObject &in)
 {
     QJsonObject JsonActor;
     QJsonObject JsonPos;
@@ -55,7 +55,7 @@ void BxActorItem::writeToJson(QJsonObject &in)
     in[mID] = JsonActor;
 }
 
-void BxActorItem::readFromJson(const QJsonObject &in)
+void BxNodeActor::readFromJson(const QJsonObject &in)
 {
         QJsonObject pos = in["pos"].toObject();
             double x = pos["x"].toDouble();
@@ -72,7 +72,20 @@ void BxActorItem::readFromJson(const QJsonObject &in)
 
 }
 
-void BxActorItem::addAttribute(BxBaseAttribute *in)
+void BxNodeActor::addAttribute(BxBaseAttribute *in)
 {
     mAttributes.push_back(in);
 }
+
+
+BxNodeActor::~BxNodeActor()
+{
+    foreach(auto attr, mAttributes)
+    {
+        if(attr)
+        {
+            delete attr;
+        }
+    }
+}
+

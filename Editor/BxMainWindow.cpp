@@ -19,7 +19,8 @@ BxMainWindow::BxMainWindow() :
     view->centerOn(0,0);
 
     connect(scene, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-    connect(scene, SIGNAL(itemInserted(QGraphicsItem*)), this, SLOT(itemInserted(QGraphicsItem*)));
+    connect(scene, SIGNAL(itemInserted()), this, SLOT(clearButtons()));
+    connect(scene, SIGNAL(cameraComplete()), this, SLOT(clearButtons()));
 
     attributeEditor = new QWidget();
     attributeEditor->setMinimumWidth(200);
@@ -78,13 +79,17 @@ void BxMainWindow::createToolBox()
 
     // add layout to king widget
     QWidget* actorWidget = new QWidget;
+    QWidget* cameraWidget = new QWidget;
+//    cameraWidget->setSizePolicy(QSizePolicy(QSizePolicy::Maximum));
+//    actorWidget->setSizePolicy(QSizePolicy(QSizePolicy::Maximum));
+    cameraWidget->setLayout(cameraLayout);
     actorWidget->setLayout(actorLayout);
 
     mainToolBox = new QToolBox;
-    mainToolBox->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Ignored));
+//    mainToolBox->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Ignored));
     mainToolBox->setMinimumWidth(actorWidget->sizeHint().width());
     mainToolBox->addItem(actorWidget, tr("Create Actors"));
-
+    mainToolBox->addItem(cameraWidget, tr("Camera"));
 }
 
 void BxMainWindow::createActions() // actions connect UI to functions
@@ -142,21 +147,20 @@ void BxMainWindow::populateAttributeEditor()
 
     if((scene) && !(scene->items().empty()))
     {
-        BxActorItem* item = qgraphicsitem_cast<BxActorItem*>(scene->selectedItems().first());
-       //DiagramItem *startItem = qgraphicsitem_cast<DiagramItem *>(startItems.first());
+        BxNodeActor* item = dynamic_cast<BxNodeActor*>(scene->selectedItems().first());
 
         if(item)
         {
-            QWidget* test = item->getControls();
-            if(test)
-                attributeLayout->addWidget(test);
+            QWidget* ctrlWidget = item->getControls();
+            if(ctrlWidget)
+                attributeLayout->addWidget(ctrlWidget);
         }
     }
     attributeEditor->setLayout(attributeLayout);
 }
 
 
-void BxMainWindow::selectionChanged()
+void BxMainWindow::selectionChanged() // UPDATES UI (ATTRIBUTE PANE) WHEN SELECTION CHANGES
 {
     QLayoutItem* item;
     while (( item = attributeEditor->layout()->takeAt(0)) != NULL )
@@ -171,13 +175,19 @@ void BxMainWindow::selectionChanged()
     }
 }
 
-void BxMainWindow::itemInserted(QGraphicsItem *in)
+void BxMainWindow::clearButtons() // RESETS BUTTON STATES TO DEFAULT
 {
     QList<QAbstractButton *> buttons = actorButtonGroup->buttons();
     foreach (QAbstractButton *button, buttons)
     {
             button->setChecked(false);
     }
+    buttons = cameraButtonGroup->buttons();
+    foreach (QAbstractButton *button, buttons)
+    {
+            button->setChecked(false);
+    }
+
 }
 
 void BxMainWindow::newFile()
@@ -225,7 +235,7 @@ void BxMainWindow::saveAs()
 
     foreach(auto item, scene->items())
     {
-        auto actor = dynamic_cast<BxActorItem*>(item);
+        auto actor = dynamic_cast<BxNodeActor*>(item);
         if (actor)
         {
             QJsonObject json;
@@ -268,26 +278,25 @@ void BxMainWindow::loadFile()
         auto first = obj.begin(); // work this out
         QJsonObject data = first.value().toObject();
 
-        BxActorItem* newActor = new BxActorItem(data);
+        BxNodeActor* newActor = new BxNodeActor(data);
         scene->insertActor(newActor);
     }
-
-/*
-    foreach(auto actor, actorArray)
-    {
-        BxActorItem* newActor = new BxActorItem(actor.toObject());
-        scene->insertActor(newActor);
-    }
-*/
-
     return;
 
 }
+
+// BUTTON ACTIONS
 
 void BxMainWindow::actorButtonGroupClick(QAbstractButton* button)
 {
     scene->setMode(BxLevelScene::insertItem);
 }
+
+void BxMainWindow::cameraButtonGroupClick(QAbstractButton* button)
+{
+    scene->setMode(BxLevelScene::editCamera);
+}
+
 
 void BxMainWindow::aboutMessage()
 {
