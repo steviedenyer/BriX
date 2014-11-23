@@ -13,6 +13,7 @@ public:
     enum Mode { insertItem, moveItem, moveView, editCamera };
     BxLevelScene();
     void insertActor(BxNodeActor*);
+    int getMode(){ return mMode; }
     
 signals:
 

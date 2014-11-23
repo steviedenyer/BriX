@@ -19,8 +19,9 @@ BxBaseAttribute::~BxBaseAttribute()
 {
     if(mControl != NULL)
     {
+#warning why doesn't this work?
 //        mControl->deleteLater();
-        delete mControl;
+//        delete mControl;
     }
 }
 

@@ -299,12 +299,27 @@ void BxMainWindow::loadFile()
 
 void BxMainWindow::actorButtonGroupClick(QAbstractButton* button)
 {
-    scene->setMode(BxLevelScene::insertItem);
+    if(scene->getMode() == BxLevelScene::insertItem)
+    {
+        scene->setMode((BxLevelScene::moveItem));
+    }
+    else
+    {
+        scene->setMode(BxLevelScene::insertItem);
+    }
 }
 
 void BxMainWindow::cameraButtonGroupClick(QAbstractButton* button)
 {
-    scene->setMode(BxLevelScene::editCamera);
+    if(scene->getMode() == BxLevelScene::editCamera)
+    {
+        scene->setMode((BxLevelScene::moveItem));
+    }
+    else
+    {
+        scene->setMode(BxLevelScene::editCamera);
+    }
+
 }
 
 

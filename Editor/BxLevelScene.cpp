@@ -56,24 +56,24 @@ void BxLevelScene::keyPressEvent(QKeyEvent* event)
     if(event->key() == Qt::Key_Backspace ||
        event->key() == Qt::Key_Escape )
     {
-        emit(itemDeleted()); // clearAttributeEditor before deleting item
-        QList<QGraphicsItem*>items = this->selectedItems();
-        foreach(auto i, items)
-        {
-            BxNodeActor* actor = dynamic_cast<BxNodeActor*>(i);
-            if(actor)
-            {
-                removeItem(actor);
-                delete actor;
-            }
-        }
-    }
-    if(event->key() == Qt::Key_Backspace)
-    {
         if(mMode == editCamera)
         {
             emit(cameraComplete());
             setMode(moveItem);
+        }
+        else
+        {
+            emit(itemDeleted()); // clearAttributeEditor before deleting item
+            QList<QGraphicsItem*>items = this->selectedItems();
+            foreach(auto i, items)
+            {
+                BxNodeActor* actor = dynamic_cast<BxNodeActor*>(i);
+                if(actor)
+                {
+                    removeItem(actor);
+                    delete actor;
+                }
+            }
         }
     }
 }

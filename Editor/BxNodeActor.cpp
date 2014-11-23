@@ -84,7 +84,7 @@ BxNodeActor::~BxNodeActor()
     {
         if(attr)
         {
-            delete attr;
+            //delete attr;
         }
     }
 }
