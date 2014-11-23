@@ -24,11 +24,10 @@ public:
 signals:
     
 public slots:
-//    void setValue(int in) { testValue = in; }
 
 private:
-//    BxIntAttribute* mTestValue;
     QVector<BxBaseAttribute*> mAttributes;
+
     QString mID;
     
 };

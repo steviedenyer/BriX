@@ -16,6 +16,7 @@ public:
     
 signals:
 
+    void itemDeleted();
     void itemInserted();
     void cameraComplete();
 

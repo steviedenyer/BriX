@@ -35,6 +35,7 @@ public slots:
     void cameraButtonGroupClick(QAbstractButton* );
     void aboutMessage();
     void selectionChanged();
+    void clearAttributeEditor();
     void clearButtons();
     void newFile();
     void saveAs();

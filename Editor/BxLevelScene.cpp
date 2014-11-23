@@ -56,6 +56,7 @@ void BxLevelScene::keyPressEvent(QKeyEvent* event)
     if(event->key() == Qt::Key_Backspace ||
        event->key() == Qt::Key_Escape )
     {
+        emit(itemDeleted()); // clearAttributeEditor before deleting item
         QList<QGraphicsItem*>items = this->selectedItems();
         foreach(auto i, items)
         {

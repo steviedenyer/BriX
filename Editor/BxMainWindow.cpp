@@ -20,6 +20,7 @@ BxMainWindow::BxMainWindow() :
 
     connect(scene, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     connect(scene, SIGNAL(itemInserted()), this, SLOT(clearButtons()));
+    connect(scene, SIGNAL(itemDeleted()), this, SLOT(clearAttributeEditor()));
     connect(scene, SIGNAL(cameraComplete()), this, SLOT(clearButtons()));
 
     attributeEditor = new QWidget();
@@ -138,10 +139,23 @@ void BxMainWindow::createToolBars()
 
 }
 
+void BxMainWindow::clearAttributeEditor()
+{
+    if(attributeEditor->layout() != NULL) // if attributeEditor is populated
+    {
+        QLayoutItem* item;
+        while (( item = attributeEditor->layout()->takeAt(0)) != NULL )
+        {
+            delete item->widget();
+            delete item;
+        }
+        delete attributeEditor->layout();
+    }
+}
 
 void BxMainWindow::populateAttributeEditor()
 {
-    delete attributeEditor->layout();
+    clearAttributeEditor();
     QVBoxLayout* attributeLayout = new QVBoxLayout();
     attributeLayout->setAlignment(Qt::AlignTop);
 
@@ -159,19 +173,15 @@ void BxMainWindow::populateAttributeEditor()
     attributeEditor->setLayout(attributeLayout);
 }
 
-
 void BxMainWindow::selectionChanged() // UPDATES UI (ATTRIBUTE PANE) WHEN SELECTION CHANGES
 {
-    QLayoutItem* item;
-    while (( item = attributeEditor->layout()->takeAt(0)) != NULL )
-    {
-        delete item->widget();
-        delete item;
-    }
-
     if(!(scene->selectedItems().empty()))
     {
         populateAttributeEditor();
+    }
+    else
+    {
+        clearAttributeEditor();
     }
 }
 
