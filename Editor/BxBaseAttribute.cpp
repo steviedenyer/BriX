@@ -21,7 +21,7 @@ BxBaseAttribute::~BxBaseAttribute()
     {
 #warning why doesn't this work?
 //        mControl->deleteLater();
-//        delete mControl;
+        delete mControl;
     }
 }
 

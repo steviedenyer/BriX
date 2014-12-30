@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QtWidgets>
 #include <QJsonObject>
+#include <QPointer>
 
 class BxBaseAttribute
 {
@@ -18,7 +19,7 @@ public:
     virtual void writeToJson(QJsonObject &) = 0;
 //    int getValue() { return mValue;}
 protected:
-    QWidget* mControl;
+    QPointer<QWidget> mControl;
     QString mName;
 
 private:

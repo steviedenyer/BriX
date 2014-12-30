@@ -1,5 +1,7 @@
 QT += core gui opengl widgets
 
+QMAKE_CXXFLAGS = -std=c++11
+
 SOURCES += \
     main.cpp \
     BxLevelScene.cpp \

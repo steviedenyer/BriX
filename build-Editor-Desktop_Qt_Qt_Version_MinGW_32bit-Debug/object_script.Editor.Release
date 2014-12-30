@@ -1,0 +1,16 @@
+INPUT(
+./release\main.o
+./release\BxLevelScene.o
+./release\BxLevelView.o
+./release\BxMainWindow.o
+./release\BxBaseAttribute.o
+./release\BxIntAttribute.o
+./release\BxNodeActor.o
+./release\BxNodePath.o
+./release\BxNodePathPoint.o
+./release\BxNodeLine.o
+./release\moc_BxMainWindow.o
+./release\moc_BxLevelScene.o
+./release\moc_BxLevelView.o
+./release\moc_BxIntAttribute.o
+);
